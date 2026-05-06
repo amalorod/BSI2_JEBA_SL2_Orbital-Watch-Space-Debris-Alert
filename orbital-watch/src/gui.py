@@ -1,7 +1,12 @@
 import tkinter as tk
 from tkinter import scrolledtext, messagebox
 
-from src.challenges import challenge_one, challenge_two, challenge_three
+
+
+from src.challenge1 import run_challenge_1
+from src.challenge2 import run_challenge_2
+from src.challenge3 import run_challenge_3
+
 
 
 class OrbitalWatchApp:
@@ -32,9 +37,9 @@ class OrbitalWatchApp:
         button_frame = tk.Frame(root, bg="#101820")
         button_frame.pack(pady=15)
 
-        self.create_button(button_frame, "Challenge 1", self.run_challenge_one).grid(row=0, column=0, padx=8)
-        self.create_button(button_frame, "Challenge 2", self.run_challenge_two).grid(row=0, column=1, padx=8)
-        self.create_button(button_frame, "Challenge 3", self.run_challenge_three).grid(row=0, column=2, padx=8)
+        self.create_button(button_frame, "Challenge 1", self.run_challenge_1).grid(row=0, column=0, padx=8)
+        self.create_button(button_frame, "Challenge 2", self.run_challenge_2).grid(row=0, column=1, padx=8)
+        self.create_button(button_frame, "Challenge 3", self.run_challenge_3).grid(row=0, column=2, padx=8)
         self.create_button(button_frame, "Alle ausführen", self.run_all).grid(row=0, column=3, padx=8)
 
         self.output = scrolledtext.ScrolledText(
@@ -72,27 +77,27 @@ class OrbitalWatchApp:
         messagebox.showerror("Fehler", str(error))
         self.write(f"ERROR: {error}")
 
-    def run_challenge_one(self):
+    def run_challenge_1(self):
         try:
-            result = challenge_one()
+            result = run_challenge_1()
             self.write(f"Challenge 1 result: {result}")
             self.write("Expected result: 2436297.459044")
             self.write("")
         except Exception as error:
             self.handle_error(error)
 
-    def run_challenge_two(self):
+    def run_challenge_2(self):
         try:
-            result = challenge_two()
+            result = run_challenge_2()
             self.write(f"Challenge 2 result: {result}")
             self.write("Expected result: -359776.16973")
             self.write("")
         except Exception as error:
             self.handle_error(error)
 
-    def run_challenge_three(self):
+    def run_challenge_3(self):
         try:
-            risks, total_distance_m = challenge_three()
+            risks, total_distance_m = run_challenge_3()
 
             self.write(f"Challenge 3 collision risks: {len(risks)}")
             self.write(f"Total distance: {total_distance_m} m")
@@ -111,9 +116,9 @@ class OrbitalWatchApp:
 
     def run_all(self):
         self.clear()
-        self.run_challenge_one()
-        self.run_challenge_two()
-        self.run_challenge_three()
+        self.run_challenge_1()
+        self.run_challenge_2()
+        self.run_challenge_3()
 
 
 def main():

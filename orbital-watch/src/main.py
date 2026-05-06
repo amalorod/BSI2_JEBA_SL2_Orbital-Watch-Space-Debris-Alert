@@ -1,17 +1,23 @@
-from src.challenges import challenge_one, challenge_two, challenge_three
+
+
+
+from src.challenge1 import run_challenge_1
+from src.challenge2 import run_challenge_2
+from src.challenge3 import run_challenge_3
+
 
 
 def main():
     print("Orbital Watch – Space Debris Alert")
     print("----------------------------------")
 
-    result_one = challenge_one()
+    result_one = run_challenge_1()
     print(f"Challenge 1 result: {result_one}")
 
-    result_two = challenge_two()
+    result_two = run_challenge_2()
     print(f"Challenge 2 result: {result_two}")
 
-    risks, total_distance_m = challenge_three()
+    risks, total_distance_m = run_challenge_3()
     print(f"Challenge 3 collision risks: {len(risks)}")
     print(f"Challenge 3 total distance: {total_distance_m} m")
 
