@@ -6,16 +6,14 @@ from src.orbital_math import dms_to_decimal, geodetic_to_ecef, euclidean_distanc
 
 DATA_DIR = Path("data")
 DEBRIS_FILE = DATA_DIR / "space_debris_positions.csv"
-SATELLITE_FILE = DATA_DIR / "satellite_positions.csv"
-SATELLITE_FILE_FALLBACK = DATA_DIR / "satelite_positions.csv"
+SATELLITE_FILE = DATA_DIR / "satelite_positions.csv"
+
 
 
 def get_satellite_file() -> Path:
     if SATELLITE_FILE.exists():
         return SATELLITE_FILE
-    if SATELLITE_FILE_FALLBACK.exists():
-        return SATELLITE_FILE_FALLBACK
-    raise FileNotFoundError("Could not find satellite_positions.csv or satelite_positions.csv in data folder.")
+    raise FileNotFoundError("Could not find satelite_positions.csv in data folder.")
 
 
 def load_debris_with_decimal_coordinates() -> list[dict]:
@@ -54,7 +52,7 @@ def load_debris_with_ecef() -> list[dict]:
     
 
     
-    altitude_col = find_column(debris[0],  ["Alt km"])
+    altitude_col = find_column(debris[0],  ["Alt_km"])
 
 
     result = []
@@ -121,7 +119,7 @@ def load_satellites() -> list[dict]:
     z_col = find_column(first_row, ["Z_m"])
 
     name_col = None
-    for candidate in ["Name", "Satellite", "SatelliteName", "ID", "Id"]:
+    for candidate in ["SatelliteID", "Name", "Satellite", "SatelliteName", "ID", "Id"]:
         try:
             name_col = find_column(first_row, [candidate])
             break
@@ -188,7 +186,7 @@ def challenge_three() -> tuple[list[dict], int]:
 
                 risks.append({
                     "satellite": satellite["satellite_name"],
-                    "debris": debris_row.get("Name") or debris_row.get("ID") or f"Debris {debris_index}",
+                    "debris": debris_row.get("DebrisID") or debris_row.get("Name") or debris_row.get("ID") or f"Debris {debris_index}",
                     "distance_m": round(distance_m, 2)
                 })
 

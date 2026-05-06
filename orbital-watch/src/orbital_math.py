@@ -3,7 +3,7 @@ import re
 
 
 WGS84_A_KM = 6378.137
-WGS84_E2 = 6.69437999014e-3
+WGS84_E2 = (1 / 298.257223563) * (2 - 1 / 298.257223563)
 
 
 def dms_to_decimal(value: str) -> float:
@@ -48,7 +48,7 @@ def geodetic_to_ecef(latitude_deg: float, longitude_deg: float, altitude_km: flo
     - altitude in kilometers
 
     Output:
-    - x, y, z in kilometers, rounded to two decimals
+    - x, y, z in kilometers
     """
     lat = math.radians(latitude_deg)
     lon = math.radians(longitude_deg)
@@ -62,7 +62,7 @@ def geodetic_to_ecef(latitude_deg: float, longitude_deg: float, altitude_km: flo
     y = (n + altitude_km) * cos_lat * math.sin(lon)
     z = (n * (1 - WGS84_E2) + altitude_km) * sin_lat
 
-    return round(x, 2), round(y, 2), round(z, 2)
+    return x,y,z
 
 
 def euclidean_distance_km(a: tuple[float, float, float], b: tuple[float, float, float]) -> float:
