@@ -17,6 +17,7 @@ Ein modulares Python-Programm zur Umwandlung von Weltraumschrott-Koordinaten, Be
 *   **Programmiersprache:** Python (ideal für CSV-Verarbeitung, mathematische Berechnungen und Prototyping)
 *   **Benutzeroberflächen:** CLI (Befehlszeile) und GUI (Grafische Oberfläche)
 *   **Testing:** Pytest zur Validierung von Soll-Ist-Werten
+*   **Effizienz:** KD-Trees zur Beschleunigung der Berechnung
 
 ---
 
