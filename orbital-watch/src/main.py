@@ -4,6 +4,7 @@
 from src.challenge1 import run_challenge_1
 from src.challenge2 import run_challenge_2
 from src.challenge3 import run_challenge_3
+from src.challenge3 import compare_challenge_3_methods
 
 
 
@@ -17,18 +18,30 @@ def main():
     result_two = run_challenge_2()
     print(f"Challenge 2 result: {result_two}")
 
-    risks, total_distance_m = run_challenge_3()
-    print(f"Challenge 3 collision risks: {len(risks)}")
-    print(f"Challenge 3 total distance: {total_distance_m} m")
+    (brute_risks, brute_total), (kd_risks, kd_total), brute_time, kd_time = compare_challenge_3_methods()
+    print()
+    print("Challenge 3 (Brute Force):")
+    print(f"Collision risks: {len(brute_risks)}")
+    print(f"Total distance: {brute_total} m")
+    print(f"Runtime: {brute_time:.6f} s")
 
-    if risks:
-        print()
-        print("Detected risks:")
-        for risk in risks:
-            print(
-                f"- {risk['satellite']} near {risk['debris']}: "
-                f"{risk['distance_m']} m"
-            )
+    print()
+    print("Challenge 3 (KD-Tree):")
+    print(f"Collision risks: {len(kd_risks)}")
+    print(f"Total distance: {kd_total} m")
+    print(f"Runtime: {kd_time:.6f} s")
+
+
+    
+    print()
+    print("Detected risks:")
+
+    for risk in kd_risks:
+        print(
+            f"- {risk['satellite']} near {risk['debris']}: "
+            f"{risk['distance_m']} m"
+        )
+
 
 
 if __name__ == "__main__":
