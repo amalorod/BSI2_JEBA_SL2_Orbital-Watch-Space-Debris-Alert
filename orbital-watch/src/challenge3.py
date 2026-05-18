@@ -1,4 +1,4 @@
-
+from __future__ import annotations
 from pathlib import Path
 from time import perf_counter
 
@@ -75,6 +75,63 @@ def _build_debris_kd_tree(debris: list[dict]) -> "KDTreeNode" | None:
     ]
     return build_kd_tree(points)
 
+def run_challenge_3_kd_tree() -> tuple[list[dict], int]:
+    debris = load_debris_with_ecef()
+    satellites = load_satellites()
+
+    debris_points = []
+
+    for index, debris_row in enumerate(debris, start=1):
+        point = (
+            debris_row["x"],
+            debris_row["y"],
+            debris_row["z"]
+        )
+
+        payload = {
+            "debris": debris_row.get("DebrisID") or f"Debris {index}"
+        }
+
+        debris_points.append((point, payload))
+
+    tree = build_kd_tree(debris_points)
+
+    risks = []
+    total_distance_m = 0.0
+
+    for satellite in satellites:
+        satellite_position = (
+            satellite["x"],
+            satellite["y"],
+            satellite["z"]
+        )
+
+        matches = radius_search(tree, satellite_position, 1)
+
+        for payload, distance_km in matches:
+            distance_m = distance_km * 1000
+            total_distance_m += distance_m
+
+            risks.append({
+                "satellite": satellite["satellite_name"],
+                "debris": payload["debris"],
+                "distance_m": round(distance_m, 2)
+            })
+
+    return risks, round(total_distance_m)
+
+
+
+
+def run_challenge_3() -> tuple[list[dict], int]:
+    brute_force_risks, brute_force_total = run_challenge_3_brute_force()
+    kd_tree_risks, kd_tree_total = run_challenge_3_kd_tree()
+
+    if brute_force_total != kd_tree_total or len(brute_force_risks) != len(kd_tree_risks):
+        print("Warning: Brute force and KD-tree results differ.")
+
+    return kd_tree_risks, kd_tree_total
+
 
 def _find_collision_risks_bruteforce(debris: list[dict], satellites: list[dict]) -> tuple[list[dict], int]:
     risks = []
@@ -116,6 +173,42 @@ def _find_collision_risks_kd_tree(debris: list[dict], satellites: list[dict]) ->
                 "debris": debris_row.get("DebrisID") or f"Debris {debris_index}",
                 "distance_m": round(distance_m, 2)
             })
+
+    return risks, round(total_distance_m)
+
+
+def run_challenge_3_brute_force() -> tuple[list[dict], int]:
+    debris = load_debris_with_ecef()
+    satellites = load_satellites()
+
+    risks = []
+    total_distance_m = 0.0
+
+    for satellite in satellites:
+        satellite_position = (
+            satellite["x"],
+            satellite["y"],
+            satellite["z"]
+        )
+
+        for debris_index, debris_row in enumerate(debris, start=1):
+            debris_position = (
+                debris_row["x"],
+                debris_row["y"],
+                debris_row["z"]
+            )
+
+            distance_km = euclidean_distance_km(satellite_position, debris_position)
+
+            if distance_km <= 1:
+                distance_m = distance_km * 1000
+                total_distance_m += distance_m
+
+                risks.append({
+                    "satellite": satellite["satellite_name"],
+                    "debris": debris_row.get("DebrisID") or f"Debris {debris_index}",
+                    "distance_m": round(distance_m, 2)
+                })
 
     return risks, round(total_distance_m)
 
